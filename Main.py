@@ -33,16 +33,9 @@ async def wakeitup(ctx):
     await ctx.send("Waking up the computer")
 
 @bot.command() # Check target status command
-async def check(ctx):
+async def isup(ctx):
     bot.log(f"Check status command on {ipv4}")
     status = "up" if await ping(ipv4) else "down or unreachable"
-    bot.log(f"Target is {status}")
-    await ctx.send(f"Target is {status}")
-
-@bot.command() # Check target status command
-async def testcheck(ctx):
-    bot.log(f"Check status command on 192.168.0.30")
-    status = "up" if await ping("192.168.0.30") else "down or unreachable"
     bot.log(f"Target is {status}")
     await ctx.send(f"Target is {status}")
 
