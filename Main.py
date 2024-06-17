@@ -29,7 +29,7 @@ async def ping(ctx):
 async def wakeitup(ctx):
     bot.log(f"Wake up command on {mac_address}")
     bot.log(f"Check status of {ipv4}")
-    ctx.send("Checking status of the target...")
+    await ctx.send("Checking status of the target...")
 
     if check_status(ipv4):
         bot.log("The target is already up")
@@ -43,7 +43,7 @@ async def wakeitup(ctx):
 @bot.command() # Check target status command
 async def isup(ctx):
     bot.log(f"Check status command on {ipv4}")
-    ctx.send("Checking status of the target...")
+    await ctx.send("Checking status of the target...")
     status = "up" if check_status(ipv4) else "down"
     bot.log(f"{ipv4} is {status}")
     await ctx.send(f"Target is {status}")
