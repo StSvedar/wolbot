@@ -2,7 +2,7 @@ import discord
 
 from Config import *
 
-from Utils.Shell_manager import wake_on_lan
+from Utils.Shell_manager import *
 from Utils.Bot import Bot
 
 intents = discord.Intents.all()
@@ -35,8 +35,8 @@ async def wakeitup(ctx):
 @bot.command() # Check target status command
 async def isup(ctx):
     bot.log(f"Check status command on {ipv4}")
-    status = "up" if await ping(ipv4) else "down or unreachable"
-    bot.log(f"Target is {status}")
+    status = "up" if check_status(ipv4) else "down"
+    bot.log(f"{ipv4} is {status}")
     await ctx.send(f"Target is {status}")
 
 @bot.command() # Close command

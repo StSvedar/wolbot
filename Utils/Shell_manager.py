@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-def ping(host):
+def check_status(host):
     response = subprocess.run(f"ping -c 1 {host}", stdout=subprocess.PIPE, shell=True)
     return response.returncode == 0
 
