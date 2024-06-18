@@ -8,18 +8,25 @@ with open("setup.txt", "r") as steup:
     for line in steup:
         if not line.startswith("#") and not line.strip() == "":
             key, value = line.split("->")
-            if key.strip() == "prefix":
-                config.prefix = value.strip()
-            elif key.strip() == "token":
-                config.token = value.strip()
-            elif key.strip() == "mac_address":
-                target.mac_address = value.strip()
-            elif key.strip() == "ipv4":
-                target.ipv4 = value.strip()
-            elif key.strip() == "user":
-                target.user = value.strip()
-            elif key.strip() == "password":
-                target.password = value.strip()
+            key = key.strip()
+            value = value.strip()
+            if value.upper() == "NONE" or value == "":
+                value = None
+            
+            # Set the values
+            if key == "prefix":
+                config.prefix = value
+            elif key == "token":
+                config.token = value
+            elif key == "user":
+                target.user = value
+            elif key == "password":
+                target.password = value
+            elif key == "mac_address":
+                target.mac_address = value
+            elif key == "ipv4":
+                if value.upper() != "AUTO":
+                    target.ipv4 = value
             else:
                 print("Invalid key: ", key)
 

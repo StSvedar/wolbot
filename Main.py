@@ -33,22 +33,39 @@ async def ping(ctx):
 
 @bot.command() # Check target status command
 async def isup(ctx):
-    bot.log(f"Check status command on {config.targets[0].ipv4}")
+    bot.log(f"Check status command")
+    if config.targets[0].ipv4 is None:
+        bot.log("No target ip address")
+        await ctx.send("No target ip address")
+        return
+
     await ctx.send("Checking target status...")
+    
     status = "up" if check_status(config.targets[0].ipv4) else "unreachable"
+    
     bot.log(f"{config.targets[0].ipv4} is {status}")
     await ctx.send(f"Target is {status}")
 
 @bot.command() # Wake up command
 async def wakeitup(ctx):
-    bot.log(f"Wake up command on {config.targets[0].mac_address}")
-    bot.log(f"Check status of {config.targets[0].ipv4}")
+    bot.log(f"Wake up command")
+    bot.log(f"Check status")
+    if config.targets[0].ipv4 is None:
+        bot.log("No target ip address")
+        await ctx.send("No target ip address")
+        return
+    if config.targets[0].mac_address is None:
+        bot.log("No target mac address")
+        await ctx.send("No target mac address")
+        return
+
     await ctx.send("Checking target status...")
 
     if check_status(config.targets[0].ipv4):
         bot.log("The target is already up")
         await ctx.send("The target is already up")
         return
+    
     if wake_on_lan(config.targets[0].mac_address):
         bot.log("Magic packet sent")
         await ctx.send("Waking up the computer")
@@ -58,14 +75,24 @@ async def wakeitup(ctx):
 
 @bot.command() # Shutdown command
 async def shutitdown(ctx):
-    bot.log(f"Shutdown command on {config.targets[0].ipv4}")
-    bot.log(f"Check status of {config.targets[0].ipv4}")
+    bot.log(f"Shutdown command")
+    bot.log(f"Check status")
+    if config.targets[0].ipv4 is None:
+        bot.log("No target ip address")
+        await ctx.send("No target ip address")
+        return
+    if config.targets[0].user is None:
+        bot.log("No target user")
+        await ctx.send("No target user")
+        return
+
     await ctx.send("Checking target status...")
 
     if not check_status(config.targets[0].ipv4):
         bot.log("The target is already down")
         await ctx.send("The target is already down")
         return
+    
     if windows_shutdown(config.targets[0].ipv4, config.targets[0].user, config.targets[0].password):
         bot.log("Shutdown command sent")
         await ctx.send("Shutting down the computer")
