@@ -38,10 +38,9 @@ class Target:
         self.user = user
         self.password = password
         self.mac_address = mac_address
+        self.ipv4 = ipv4
         if self.ipv4 is None and mac_address is not None:
             self.ipv4 = resolve_ip(mac_address)
-        else:
-            self.ipv4 = ipv4
         
     def __str__(self):
         return f"ipv4: {self.ipv4}, mac_address: {self.mac_address}, user: {self.user}, password: {self.password}"
