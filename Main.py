@@ -1,12 +1,18 @@
 import discord
 
-from Config import *
-
+from Utils.Config_reader import *
 from Utils.Shell_manager import *
 from Utils.Bot import Bot
 
+try:
+    config = Config()
+    config.load("config.json")
+except FileNotFoundError:
+    print("Config file not found : setup.py must be run first")
+    exit()
+
 intents = discord.Intents.all()
-bot = Bot(command_prefix = prefix, intents = intents)
+bot = Bot(command_prefix = config.prefix, intents = intents)
 
 # Events
 @bot.event # On ready event
@@ -27,23 +33,23 @@ async def ping(ctx):
 
 @bot.command() # Check target status command
 async def isup(ctx):
-    bot.log(f"Check status command on {ipv4}")
+    bot.log(f"Check status command on {config.ipv4}")
     await ctx.send("Checking target status...")
-    status = "up" if check_status(ipv4) else "down"
-    bot.log(f"{ipv4} is {status}")
+    status = "up" if check_status(config.ipv4) else "unreachable"
+    bot.log(f"{config.ipv4} is {status}")
     await ctx.send(f"Target is {status}")
 
 @bot.command() # Wake up command
 async def wakeitup(ctx):
-    bot.log(f"Wake up command on {mac_address}")
-    bot.log(f"Check status of {ipv4}")
+    bot.log(f"Wake up command on {config.mac_address}")
+    bot.log(f"Check status of {config.ipv4}")
     await ctx.send("Checking target status...")
 
-    if check_status(ipv4):
+    if check_status(config.ipv4):
         bot.log("The target is already up")
         await ctx.send("The target is already up")
         return
-    if wake_on_lan(mac_address):
+    if wake_on_lan(config.mac_address):
         bot.log("Magic packet sent")
         await ctx.send("Waking up the computer")
     else:
@@ -52,15 +58,15 @@ async def wakeitup(ctx):
 
 @bot.command() # Shutdown command
 async def shutitdown(ctx):
-    bot.log(f"Shutdown command on {ipv4}")
-    bot.log(f"Check status of {ipv4}")
+    bot.log(f"Shutdown command on {config.ipv4}")
+    bot.log(f"Check status of {config.ipv4}")
     await ctx.send("Checking target status...")
 
-    if not check_status(ipv4):
+    if not check_status(config.ipv4):
         bot.log("The target is already down")
         await ctx.send("The target is already down")
         return
-    if windows_shutdown(ipv4, user, password):
+    if windows_shutdown(config.ipv4, config.user, config.password):
         bot.log("Shutdown command sent")
         await ctx.send("Shutting down the computer")
     else:
@@ -73,4 +79,4 @@ async def close(ctx):
     await ctx.send("Bye bye")
     await bot.close()
 
-bot.run(token)
+bot.run(config.token)
