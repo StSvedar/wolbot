@@ -30,6 +30,3 @@ def resolve_ip(mac_target):
     match = pattern.search(line)
 
     return match.group(0) if found else None
-
-
-print(resolve_ip("B4:2E:99:89:83:F7"))

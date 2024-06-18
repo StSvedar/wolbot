@@ -1,5 +1,5 @@
 import json
-from Shell_manager import resolve_ip
+from Utils.Shell_manager import resolve_ip
 
 class Config:
     def __init__(self, prefix=None, token=None):

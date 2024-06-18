@@ -1,4 +1,3 @@
-
 from Utils.Config_reader import Config, Target
 
 config = Config()
