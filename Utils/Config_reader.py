@@ -40,10 +40,13 @@ class Target:
         self.mac_address = mac_address
         self.ipv4 = ipv4
         if self.ipv4 is None and mac_address is not None:
-            self.ipv4 = resolve_ip(mac_address)
+            self.set_auto_ip()
         
     def __str__(self):
         return f"ipv4: {self.ipv4}, mac_address: {self.mac_address}, user: {self.user}, password: {self.password}"
     
     def __repr__(self):
         return f"Target({self.ipv4}, {self.mac_address}, {self.user}, {self.password})"
+    
+    def set_auto_ip(self):
+        self.ipv4 = resolve_ip(self.mac_address)
