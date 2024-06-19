@@ -25,7 +25,7 @@ with open("setup.txt", "r") as steup:
                 target.mac_address = value
             elif key == "ipv4":
                 if value.upper() == "AUTO":
-                    target.set_auto_ip()
+                    target.ipv4 = None
                 else:
                     target.ipv4 = value
             else:

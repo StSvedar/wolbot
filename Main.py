@@ -7,8 +7,14 @@ from Utils.Bot import Bot
 try:
     config = Config()
     config.load("config.json")
+    if not config.is_complete():
+        print("Config file is not complete")
+        exit()
 except FileNotFoundError:
     print("Config file not found : setup.py must be run first")
+    exit()
+except IP_resolution_error as e:
+    print(e)
     exit()
 
 intents = discord.Intents.all()
@@ -17,6 +23,7 @@ bot = Bot(command_prefix = config.prefix, intents = intents)
 # Events
 @bot.event # On ready event
 async def on_ready():
+    print(f"mac : {config.targets[0].mac_address}, ipv4 : {config.targets[0].ipv4}")
     bot.log("WOL Bot is ready")
     bot.log("-----------------")
 

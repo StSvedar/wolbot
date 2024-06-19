@@ -31,6 +31,15 @@ class Config:
 
     def add_target(self, target):
         self.targets.append(target)
+
+    def remove_target(self, target):
+        self.targets.remove(target)
+
+    def get_target(self, index):
+        return self.targets[index]
+    
+    def is_complete(self):
+        return self.prefix is not None and self.token is not None and all([target.is_complete() for target in self.targets])
             
 
 class Target:
@@ -50,3 +59,16 @@ class Target:
     
     def set_auto_ip(self):
         self.ipv4 = resolve_ip(self.mac_address)
+        if self.ipv4 == None:
+            raise IP_resolution_error("Could not resolve the ip address")
+        
+    def is_complete(self):
+        return self.user is not None and self.password is not None and self.mac_address is not None and self.ipv4 is not None
+
+class IP_resolution_error(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+    def __str__(self):
+        return f"IP_resolution_error: {self.message}"
