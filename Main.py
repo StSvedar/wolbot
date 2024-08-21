@@ -4,17 +4,35 @@ from Utils.Config_reader import *
 from Utils.Shell_manager import *
 from Utils.Bot import Bot
 
+config = Config()
+need_base_setup = False
 try:
-    config = Config()
-    config.load("config.json")
-    if not config.is_complete():
-        print("Config file is not complete")
-        exit()
+    config.load(CONFIG_FILE)
 except FileNotFoundError:
-    print("Config file not found : setup.py must be run first")
-    exit()
+    print("Creating config file...\n")
+    need_base_setup = True
 except IP_resolution_error as e:
     print(e)
+    exit()
+
+if not need_base_setup and not config.is_complete():
+    print("Config file is not complete")
+    reset = input("Do you want to reset it to the initial setup parameters ? (y/n): ").lower()
+    if reset == "y":
+        config = Config()
+        need_base_setup = True
+    else:
+        exit()
+
+if need_base_setup:
+    try:
+        setupBot(config)
+    except IP_resolution_error as e:
+        print(e)
+        exit()
+
+if not config.is_complete():
+    print("setup.txt parameters are not complete")
     exit()
 
 intents = discord.Intents.all()

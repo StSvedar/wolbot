@@ -16,7 +16,7 @@ def windows_shutdown(ipv4_target, user, password, delay=1):
 def resolve_ip(mac_target):
     # Get the arp table
     response = subprocess.run(f"arp -a", shell=True, capture_output=True)
-    lines = response.stdout.decode().split("\n")
+    lines = response.stdout.decode().split("\n")    # TODO: doesn't work on windows (find the right place to raise an exception)
 
     # Find the line that contains the mac address
     found = False
