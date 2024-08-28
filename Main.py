@@ -75,7 +75,7 @@ async def list(ctx):
 
     message = "Targets :\n"
     for target in config.targets:
-        message += f"- {target.name}"
+        message += f"- {target.name} : {target.os} {target.user} {target.mac_address} {target.ipv4}"
         if target == config.default_target:
             message += " (default)"
         message += "\n"
@@ -178,7 +178,7 @@ async def wakeup(ctx, target_name=None):
     
     if wake_on_lan(target.mac_address):
         bot.log("Magic packet sent")
-        await ctx.send(f"Waking up the {target.name}")
+        await ctx.send(f"Waking up {target.name}")
     else:
         bot.log("Failed to send magic packet")
         await ctx.send("Failed to wake up the computer")
