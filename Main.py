@@ -30,7 +30,10 @@ async def command_target(ctx, target_name:str = None):
 # Main
 config = Config()
 try:
-    config.load(CONFIG_FILE)
+    config.load(CONFIG_FILE)    
+    if not config.is_complete():
+        print("Config file is not complete")
+        wrong_config_exit()
 except FileNotFoundError:
     print("Config file not found, creating a new one")
     config.prefix = input("Enter the command prefix : ")
@@ -38,10 +41,6 @@ except FileNotFoundError:
     config.save(CONFIG_FILE)
 except ValueError as e:
     print(e)
-    wrong_config_exit()
-
-if not config.is_complete():
-    print("Config file is not complete")
     wrong_config_exit()
 
 try:
@@ -207,10 +206,8 @@ async def shutdown(ctx, target_name=None):
     
     success = False
     if target.os.upper() == 'LINUX':
-        await ctx.send("Sending linux shutdown command...")
         success = linux_shutdown(target.ipv4, target.user)
-    elif target.os.upper == 'WINDOWS':
-        await ctx.send("Sending windows shutdown command...")
+    elif target.os.upper() == 'WINDOWS':
         success = windows_shutdown(target.ipv4, target.user, target.password)
 
     if success:
