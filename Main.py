@@ -207,7 +207,13 @@ async def shutdown(ctx, target_name=None):
         await ctx.send("The target is already down")
         return
     
-    if windows_shutdown(target.ipv4, target.user, target.password):
+    success = False
+    if target.os is 'linux':
+        success = linux_shutdown(target.ipv4, target.user)
+    elif target.os is 'windows':
+        success = windows_shutdown(target.ipv4, target.user, target.password)
+
+    if success:
         bot.log("Shutdown command sent")
         await ctx.send("Shutting down the computer")
     else:

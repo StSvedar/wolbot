@@ -13,6 +13,10 @@ def windows_shutdown(ipv4_target: str, user: str, password: str, delay=1):
     response = subprocess.run(f"net rpc -S {ipv4_target} -U {user}%{password} shutdown -f -t {delay}", shell=True)
     return response.returncode == 0
 
+def linux_shutdown(ipv4_target: str, user: str, delay=0):
+    response = subprocess.run(f"ssh {user}@{ipv4_target} sudo shutdown -h {delay}", shell=True)
+    return response.returncode == 0
+
 def resolve_ip(mac_target: str):
     # Get the arp table
     response = subprocess.run(f"arp -a", shell=True, capture_output=True)
