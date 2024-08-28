@@ -120,18 +120,16 @@ async def setdefault(ctx, name):
         await ctx.send(e)
 
 @bot.command() # Remove target command
-async def remove(ctx, name):
+async def remove(ctx, target_name):
     bot.log("Remove command")
-    target = config.get_target_by_name(name)
+    target = await command_target(ctx, target_name)
     if target is None:
-        bot.log(f"Target not found : {name}")
-        await ctx.send(f"Target not found : {name}")
         return
 
     config.remove_target(target)
     config.save(CONFIG_FILE)
-    bot.log(f"Target removed : {name}")
-    await ctx.send(f"Target removed : {name}")
+    bot.log(f"Target removed : {target.name}")
+    await ctx.send(f"Target removed : {target.name}")
 
 @bot.command() # Check target status command
 async def isup(ctx, target_name=None):
@@ -208,9 +206,9 @@ async def shutdown(ctx, target_name=None):
         return
     
     success = False
-    if target.os is 'linux':
+    if target.os.upper() is 'LINUX':
         success = linux_shutdown(target.ipv4, target.user)
-    elif target.os is 'windows':
+    elif target.os.upper is 'WINDOWS':
         success = windows_shutdown(target.ipv4, target.user, target.password)
 
     if success:
