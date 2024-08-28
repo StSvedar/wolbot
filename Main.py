@@ -206,9 +206,11 @@ async def shutdown(ctx, target_name=None):
         return
     
     success = False
-    if target.os.upper() is 'LINUX':
+    if target.os.upper() == 'LINUX':
+        await ctx.send("Sending linux shutdown command...")
         success = linux_shutdown(target.ipv4, target.user)
-    elif target.os.upper is 'WINDOWS':
+    elif target.os.upper == 'WINDOWS':
+        await ctx.send("Sending windows shutdown command...")
         success = windows_shutdown(target.ipv4, target.user, target.password)
 
     if success:
